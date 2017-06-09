@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, SearchResultImageActivity.class);
         intent.putExtra("fetchedImage", "image object should go here");
+        String searchQuery = (String) editTextBox.getText().toString();
+        intent.putExtra("searchQuery", searchQuery);
         startActivity(intent);
     }
 }
