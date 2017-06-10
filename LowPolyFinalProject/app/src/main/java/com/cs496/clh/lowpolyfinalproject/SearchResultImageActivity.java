@@ -51,21 +51,24 @@ public class SearchResultImageActivity extends AppCompatActivity {
         if (intent != null && intent.hasExtra("fetchedImage")) {
             // string will change to the fetched image object or maybe just image
             String ex =(String) intent.getSerializableExtra("fetchedImage");
+            String query = intent.getStringExtra("searchQuery");
             Log.d("DEBUG","Inside bitmap fetch location");
+            Log.d("DEBUG","search query IS = " + query);
             //example placeholder image
             //Drawable placeHolderImg = getResources().getDrawable( R.drawable.ic_photo_camera_black_24dp );
             //ColorFilter filter = new LightingColorFilter( Color.BLUE, Color.BLUE );
             //imgView.setColorFilter(filter);
             //imgView.setImageDrawable(placeHolderImg);
-            //BitmapFactory.Options options = new BitmapFactory.Options();
-            //options.inSampleSize = 4;
-            //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
-            //imgView.setImageBitmap(bitmap);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 4;
+            Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
+            imgView.setImageBitmap(placeHolder);
 
             //String bURL = "http://loremflickr.com/1000/1000/boat";
             int dW = 200;
             int dH = 200;
-            String bURL = buildLFURL(dW, dH, "water");
+            //String bURL = buildLFURL(dW, dH, "water");
+            String bURL = buildLFURL(dW, dH, query);
             Log.d("BUILD", "url is " + bURL);
             Glide.
                     with(SearchResultImageActivity.this).
@@ -86,31 +89,28 @@ public class SearchResultImageActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             //do the poly logic here>
-
-            //BitmapFactory.Options options = new BitmapFactory.Options();
-            //options.inSampleSize = 4;
-            //Bitmap beforePoly = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
-            //Bitmap urlImg;
             Bitmap beforePoly = null;
 
-            // Glide working load into view
-            /*Glide.
-                    with(SearchResultImageActivity.this).
-                    load(bURL).
-                    into(imgView);
-            */
-            beforePoly = ((BitmapDrawable)imgView.getDrawable()).getBitmap();
-
-
-            int gradientThresh = 30;
-            Bitmap afterPoly = LowPoly.generate(beforePoly, gradientThresh);
-            imgView.setImageBitmap(afterPoly);
-            Context context = getApplicationContext();
-            CharSequence text = "Complete!";
-            int duration = Toast.LENGTH_SHORT;
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
-            starImgBtn.setVisibility(View.VISIBLE);
+            if(imgView.getDrawable() != null) {
+                beforePoly = ((BitmapDrawable) imgView.getDrawable()).getBitmap();
+            } else {
+                //doesn't seem to be detecting failure
+                Log.d("FAILURE", "No image loaded from glide");
+            }
+            if(beforePoly != null) {
+                int gradientThresh = 30;
+                Bitmap afterPoly = LowPoly.generate(beforePoly, gradientThresh);
+                imgView.setImageBitmap(afterPoly);
+                Context context = getApplicationContext();
+                CharSequence text = "Complete!";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                starImgBtn.setVisibility(View.VISIBLE);
+            } else {
+                // doesn't seem to be detecting failure
+                Log.d("FAILURE", "No image loaded from glide");
+            }
         }
     }
     class handleStarImageClickButton implements View.OnClickListener{

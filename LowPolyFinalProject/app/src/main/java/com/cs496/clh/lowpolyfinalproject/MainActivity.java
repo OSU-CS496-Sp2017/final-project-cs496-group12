@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,9 +28,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String searchQuery = editTextBox.getText().toString();
                 if (!TextUtils.isEmpty(searchQuery)) {
+                    Log.d("SEARCH", "Input search query = " + searchQuery);
                     //call search method here
                     //here i will show the other view
-                    fetchImage("http://example.com/?image=searchQuery");
+                    fetchImage(searchQuery);
                 }
             }
         });
