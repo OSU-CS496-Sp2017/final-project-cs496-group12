@@ -65,11 +65,18 @@ public class SearchResultImageActivity extends AppCompatActivity {
             //ColorFilter filter = new LightingColorFilter( Color.BLUE, Color.BLUE );
             //imgView.setColorFilter(filter);
             //imgView.setImageDrawable(placeHolderImg);
+<<<<<<< HEAD
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 4;
+            Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
+            imgView.setImageBitmap(placeHolder);
+=======
             //BitmapFactory.Options options = new BitmapFactory.Options();
             //options.inSampleSize = 4;
             //Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
             //imgView.setImageBitmap(placeHolder);
 
+>>>>>>> 3e9c58f5c17156dc2728e211d114cf3782a40302
             //String bURL = "http://loremflickr.com/1000/1000/boat";
             //default width and height
             int dW = 400;
