@@ -11,8 +11,8 @@
         android:id="@+id/text_view"
         android:textAlignment="center"/>
     <ImageView
-        android:layout_width="1000px"
-        android:layout_height= "1000px"
+        android:layout_width="300dp"
+        android:layout_height= "300dp"
         android:id="@+id/image_view"/>
     <Button
         android:layout_width="match_parent"
