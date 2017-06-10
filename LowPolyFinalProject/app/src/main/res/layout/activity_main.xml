@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.cs496.clh.lowpolyfinalproject.MainActivity">
+    tools:context="com.cs496.clh.lowpolyfinalproject.MainActivity"
+    android:id="@+id/main_activity_id">
 
     <TextView
         android:layout_width="match_parent"

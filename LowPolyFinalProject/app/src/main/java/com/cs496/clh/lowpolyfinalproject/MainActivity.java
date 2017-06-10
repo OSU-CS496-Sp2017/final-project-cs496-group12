@@ -1,6 +1,7 @@
 package com.cs496.clh.lowpolyfinalproject;
 
 import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
 
     private EditText editTextBox;
+    private static final String SEARCH_BOX_KEY = "SearchEditTextBox";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if(savedInstanceState !=null && savedInstanceState.containsKey(SEARCH_BOX_KEY))
+        {
+            String savedValue = savedInstanceState.getString(SEARCH_BOX_KEY);
+            editTextBox.setText(savedValue);
+            Log.d("onSaveInstanceState",savedValue);
+        }
+
+
     }
 
     @Override
@@ -63,5 +74,12 @@ public class MainActivity extends AppCompatActivity {
         String searchQuery = (String) editTextBox.getText().toString();
         intent.putExtra("searchQuery", searchQuery);
         startActivity(intent);
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);;
+        Log.d("onSaveInstanceState","outState");
+        String searchQuery = (String) editTextBox.getText().toString();
+        outState.putString(SEARCH_BOX_KEY,searchQuery);
     }
 }
