@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -37,6 +41,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
     private TextView textView;
     private Button applyPolyBtn;
     private Button starImgBtn;
+    private boolean polyDone = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,11 +64,20 @@ public class SearchResultImageActivity extends AppCompatActivity {
             //ColorFilter filter = new LightingColorFilter( Color.BLUE, Color.BLUE );
             //imgView.setColorFilter(filter);
             //imgView.setImageDrawable(placeHolderImg);
+<<<<<<< HEAD
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 4;
             Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
             imgView.setImageBitmap(placeHolder);
+=======
+            //BitmapFactory.Options options = new BitmapFactory.Options();
+            //options.inSampleSize = 4;
+            //Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
+            //imgView.setImageBitmap(placeHolder);
+
+>>>>>>> 3e9c58f5c17156dc2728e211d114cf3782a40302
             //String bURL = "http://loremflickr.com/1000/1000/boat";
+            //default width and height
             int dW = 200;
             int dH = 200;
             //String bURL = buildLFURL(dW, dH, "water");
@@ -73,6 +87,15 @@ public class SearchResultImageActivity extends AppCompatActivity {
                     with(SearchResultImageActivity.this).
                     load(bURL).
                     into(imgView);
+            //placeholder not working
+            /*if(imgView.getDrawable() == null) {
+                Log.d("Search", "failed to download image into view");
+                Log.d("Search", "putting in placeholder");
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.searchfailure, options);
+                imgView.setImageBitmap(placeHolder);
+            }*/
         }
         if(intent !=null && intent.hasExtra("searchQuery"))
         {
@@ -92,24 +115,27 @@ public class SearchResultImageActivity extends AppCompatActivity {
 
             if(imgView.getDrawable() != null) {
                 beforePoly = ((BitmapDrawable) imgView.getDrawable()).getBitmap();
+                if(beforePoly != null && !polyDone) {
+                    int gradientThresh = 30;
+                    Bitmap afterPoly = LowPoly.generate(beforePoly, gradientThresh);
+                    polyDone = true;
+                    imgView.setImageBitmap(afterPoly);
+                    Context context = getApplicationContext();
+                    CharSequence text = "Complete!";
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                    applyPolyBtn.setVisibility(View.GONE);
+                    starImgBtn.setVisibility(View.VISIBLE);
+                } else {
+                    // doesn't seem to be detecting failure
+                    Log.d("FAILURE", "No image in before poly");
+                }
             } else {
                 //doesn't seem to be detecting failure
-                Log.d("FAILURE", "No image loaded from glide");
+                Log.d("FAILURE", "No image inside view");
             }
-            if(beforePoly != null) {
-                int gradientThresh = 30;
-                Bitmap afterPoly = LowPoly.generate(beforePoly, gradientThresh);
-                imgView.setImageBitmap(afterPoly);
-                Context context = getApplicationContext();
-                CharSequence text = "Complete!";
-                int duration = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-                starImgBtn.setVisibility(View.VISIBLE);
-            } else {
-                // doesn't seem to be detecting failure
-                Log.d("FAILURE", "No image loaded from glide");
-            }
+
         }
     }
     class handleStarImageClickButton implements View.OnClickListener{
