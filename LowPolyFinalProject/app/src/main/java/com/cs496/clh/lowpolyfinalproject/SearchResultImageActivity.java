@@ -2,17 +2,31 @@ package com.cs496.clh.lowpolyfinalproject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.uniquestudio.lowpoly.LowPoly;
+
+import com.cs496.clh.lowpolyfinalproject.utils.LFutils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.concurrent.ExecutionException;
+
+import static com.cs496.clh.lowpolyfinalproject.utils.LFutils.buildLFURL;
+import static com.cs496.clh.lowpolyfinalproject.utils.NetworkUtils.doHTTPGet;
 
 /**
  * Created by Alshawi on 6/8/2017.
@@ -37,12 +51,26 @@ public class SearchResultImageActivity extends AppCompatActivity {
         if (intent != null && intent.hasExtra("fetchedImage")) {
             // string will change to the fetched image object or maybe just image
             String ex =(String) intent.getSerializableExtra("fetchedImage");
-
+            Log.d("DEBUG","Inside bitmap fetch location");
             //example placeholder image
-            Drawable placeHolderImg = getResources().getDrawable( R.drawable.ic_photo_camera_black_24dp );
-            ColorFilter filter = new LightingColorFilter( Color.BLUE, Color.BLUE );
-            imgView.setColorFilter(filter);
-            imgView.setImageDrawable(placeHolderImg);
+            //Drawable placeHolderImg = getResources().getDrawable( R.drawable.ic_photo_camera_black_24dp );
+            //ColorFilter filter = new LightingColorFilter( Color.BLUE, Color.BLUE );
+            //imgView.setColorFilter(filter);
+            //imgView.setImageDrawable(placeHolderImg);
+            //BitmapFactory.Options options = new BitmapFactory.Options();
+            //options.inSampleSize = 4;
+            //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
+            //imgView.setImageBitmap(bitmap);
+
+            //String bURL = "http://loremflickr.com/1000/1000/boat";
+            int dW = 200;
+            int dH = 200;
+            String bURL = buildLFURL(dW, dH, "water");
+            Log.d("BUILD", "url is " + bURL);
+            Glide.
+                    with(SearchResultImageActivity.this).
+                    load(bURL).
+                    into(imgView);
         }
         if(intent !=null && intent.hasExtra("searchQuery"))
         {
@@ -58,6 +86,25 @@ public class SearchResultImageActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             //do the poly logic here>
+
+            //BitmapFactory.Options options = new BitmapFactory.Options();
+            //options.inSampleSize = 4;
+            //Bitmap beforePoly = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
+            //Bitmap urlImg;
+            Bitmap beforePoly = null;
+
+            // Glide working load into view
+            /*Glide.
+                    with(SearchResultImageActivity.this).
+                    load(bURL).
+                    into(imgView);
+            */
+            beforePoly = ((BitmapDrawable)imgView.getDrawable()).getBitmap();
+
+
+            int gradientThresh = 30;
+            Bitmap afterPoly = LowPoly.generate(beforePoly, gradientThresh);
+            imgView.setImageBitmap(afterPoly);
             Context context = getApplicationContext();
             CharSequence text = "Complete!";
             int duration = Toast.LENGTH_SHORT;
