@@ -63,7 +63,6 @@ public class SearchResultImageActivity extends AppCompatActivity {
             options.inSampleSize = 4;
             Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
             imgView.setImageBitmap(placeHolder);
-
             //String bURL = "http://loremflickr.com/1000/1000/boat";
             int dW = 200;
             int dH = 200;
