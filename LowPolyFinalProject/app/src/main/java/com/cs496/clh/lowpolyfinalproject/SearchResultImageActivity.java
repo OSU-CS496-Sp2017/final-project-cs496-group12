@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.uniquestudio.lowpoly.LowPoly;
 
 import com.cs496.clh.lowpolyfinalproject.utils.LFutils;
@@ -60,10 +61,15 @@ public class SearchResultImageActivity extends AppCompatActivity {
             Log.d("DEBUG","Inside bitmap fetch location");
             Log.d("DEBUG","search query IS = " + query);
             //example placeholder image
-            //Drawable placeHolderImg = getResources().getDrawable( R.drawable.ic_photo_camera_black_24dp );
+            Drawable placeHolderImg = getResources().getDrawable( R.drawable.ic_photo_camera_black_24dp );
             //ColorFilter filter = new LightingColorFilter( Color.BLUE, Color.BLUE );
             //imgView.setColorFilter(filter);
             //imgView.setImageDrawable(placeHolderImg);
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 4;
+            Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
+            imgView.setImageBitmap(placeHolder);
 
             //BitmapFactory.Options options = new BitmapFactory.Options();
             //options.inSampleSize = 4;
@@ -72,24 +78,31 @@ public class SearchResultImageActivity extends AppCompatActivity {
 
             //String bURL = "http://loremflickr.com/1000/1000/boat";
             //default width and height
-            int dW = 200;
-            int dH = 200;
+            int dW = 400;
+            int dH = 400;
             //String bURL = buildLFURL(dW, dH, "water");
             String bURL = buildLFURL(dW, dH, query);
+
+
             Log.d("BUILD", "url is " + bURL);
+
             Glide.
                     with(SearchResultImageActivity.this).
-                    load(bURL).
-                    into(imgView);
-            //placeholder not working
-            /*if(imgView.getDrawable() == null) {
-                Log.d("Search", "failed to download image into view");
-                Log.d("Search", "putting in placeholder");
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 4;
-                Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.searchfailure, options);
-                imgView.setImageBitmap(placeHolder);
-            }*/
+                    load(bURL).into(imgView);
+            //sleep testing
+
+            long sleeptime = 3000;
+            try {
+                Thread.sleep(sleeptime);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+            if(imgView.getDrawable() != null) {
+                Log.d("AFTERSLEEP", "img not in view after sleep");
+            }
+
+            //SystemClock.sleep(timeInMills);
+
         }
         if(intent !=null && intent.hasExtra("searchQuery"))
         {
@@ -128,6 +141,18 @@ public class SearchResultImageActivity extends AppCompatActivity {
             } else {
                 //doesn't seem to be detecting failure
                 Log.d("FAILURE", "No image inside view");
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 4;
+                //rough way of handling load failure
+                //polyDone = true;
+                //applyPolyBtn.setVisibility(View.GONE);
+                Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.searchfailure, options);
+                imgView.setImageBitmap(placeHolder);
+                Context context = getApplicationContext();
+                CharSequence text = "Image search failure! Try again!";
+                int duration = Toast.LENGTH_SHORT;
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
             }
 
         }
