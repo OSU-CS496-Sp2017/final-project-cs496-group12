@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.starred_menu:
-                //Intent settingsIntent = new Intent(this, SettingsActivity.class);
-                //startActivity(settingsIntent);
+                Intent StarredIntent = new Intent(this, StarredActivity.class);
+                startActivity(StarredIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
