@@ -37,6 +37,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
     private TextView textView;
     private Button applyPolyBtn;
     private Button starImgBtn;
+    private boolean polyDone = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,15 +99,17 @@ public class SearchResultImageActivity extends AppCompatActivity {
                 //doesn't seem to be detecting failure
                 Log.d("FAILURE", "No image loaded from glide");
             }
-            if(beforePoly != null) {
+            if(beforePoly != null && !polyDone) {
                 int gradientThresh = 30;
                 Bitmap afterPoly = LowPoly.generate(beforePoly, gradientThresh);
+                polyDone = true;
                 imgView.setImageBitmap(afterPoly);
                 Context context = getApplicationContext();
                 CharSequence text = "Complete!";
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, text, duration);
                 toast.show();
+                applyPolyBtn.setVisibility(View.GONE);
                 starImgBtn.setVisibility(View.VISIBLE);
             } else {
                 // doesn't seem to be detecting failure
