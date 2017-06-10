@@ -35,6 +35,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        Button randomButton = (Button)findViewById(R.id.search_random);
+        randomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    fetchImage("");
+            }
+        });
+
     }
 
     @Override

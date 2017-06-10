@@ -26,6 +26,12 @@
         android:layout_height="wrap_content"
         android:text="Search"
         android:textSize="22sp"/>
+    <Button
+        android:id="@+id/search_random"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search random"
+        android:textSize="22sp"/>
     <!--<Button-->
         <!--android:id="@+id/btn_search"-->
         <!--android:layout_width="match_parent"-->
