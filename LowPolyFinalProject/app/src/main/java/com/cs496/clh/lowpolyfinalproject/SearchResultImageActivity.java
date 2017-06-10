@@ -1,6 +1,7 @@
 package com.cs496.clh.lowpolyfinalproject;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,6 +25,8 @@ import com.uniquestudio.lowpoly.LowPoly;
 
 import com.cs496.clh.lowpolyfinalproject.utils.LFutils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -98,8 +101,10 @@ public class SearchResultImageActivity extends AppCompatActivity {
             } catch(Exception e){
                 e.printStackTrace();
             }
-            if(imgView.getDrawable() != null) {
+            if(imgView.getDrawable() == null) {
                 Log.d("AFTERSLEEP", "img not in view after sleep");
+            } else {
+                Log.d("AFTERSLEEP", "img IS IN view after sleep");
             }
 
             //SystemClock.sleep(timeInMills);
@@ -162,11 +167,47 @@ public class SearchResultImageActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             //save the image logic goes here.......
+            Bitmap beforePoly = null;
+
+            if(imgView.getDrawable() != null) {
+                beforePoly = ((BitmapDrawable) imgView.getDrawable()).getBitmap();
+                //String path = saveToInternalStorage(beforePoly);
+               //Log.d("WRITE", "JUST WROTE TO THIS PATH =" + path);
+            } else {
+                Log.d("WRITE", "no bitmap to write");
+            }
+
+
+
+
             Context context = getApplicationContext();
             CharSequence text = "Image is Starred!";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         }
+    }
+    private String saveToInternalStorage(Bitmap bitmapImage){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath=new File(directory,"profile.jpg");
+
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return directory.getAbsolutePath();
     }
 }
