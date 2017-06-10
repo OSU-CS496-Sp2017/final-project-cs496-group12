@@ -79,7 +79,6 @@ public class SearchResultImageActivity extends AppCompatActivity {
             //Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
             //imgView.setImageBitmap(placeHolder);
 
-
             //String bURL = "http://loremflickr.com/1000/1000/boat";
             //default width and height
             int dW = 400;
