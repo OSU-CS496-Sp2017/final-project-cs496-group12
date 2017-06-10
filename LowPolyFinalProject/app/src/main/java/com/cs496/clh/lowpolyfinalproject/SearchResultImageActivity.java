@@ -65,6 +65,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
             imgView.setImageBitmap(placeHolder);
 
             //String bURL = "http://loremflickr.com/1000/1000/boat";
+            //default width and height
             int dW = 200;
             int dH = 200;
             //String bURL = buildLFURL(dW, dH, "water");
