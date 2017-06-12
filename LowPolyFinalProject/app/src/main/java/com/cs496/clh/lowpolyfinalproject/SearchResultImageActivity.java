@@ -47,6 +47,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
     private TextView textView;
     private Button applyPolyBtn;
     private Button starImgBtn;
+    private Button loadImgBtn;
     private boolean polyDone = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text_view);
         applyPolyBtn = (Button) findViewById(R.id.apply_poly_btn);
         starImgBtn = (Button) findViewById(R.id.star_poly_btn);
+        loadImgBtn = (Button) findViewById(R.id.load_poly_btn);
 
 
         Intent intent = getIntent();
@@ -84,8 +86,8 @@ public class SearchResultImageActivity extends AppCompatActivity {
 
             //String bURL = "http://loremflickr.com/1000/1000/boat";
             //default width and height
-            int dW = 400;
-            int dH = 400;
+            int dW = 300;
+            int dH = 300;
             //String bURL = buildLFURL(dW, dH, "water");
             String bURL = buildLFURL(dW, dH, query);
 
@@ -121,6 +123,8 @@ public class SearchResultImageActivity extends AppCompatActivity {
         applyPolyBtn.setOnClickListener(new handleApplyPolyClickButton());
 
         starImgBtn.setOnClickListener(new handleStarImageClickButton());
+
+        loadImgBtn.setOnClickListener(new loadStarClickButton());
     }
     class handleApplyPolyClickButton implements View.OnClickListener{
         @Override
@@ -189,6 +193,22 @@ public class SearchResultImageActivity extends AppCompatActivity {
 
             Context context = getApplicationContext();
             CharSequence text = "Image is Starred!";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+    }
+    class loadStarClickButton implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            //Load image into imgView
+
+            String loadPath = "/data/user/0/com.cs496.clh.lowpolyfinalproject/app_imageDir";
+            loadImageFromStorage(loadPath, "imgname.jpg");
+
+
+            Context context = getApplicationContext();
+            CharSequence text = "Starred image loaded!";
             int duration = Toast.LENGTH_SHORT;
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();

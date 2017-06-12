@@ -31,4 +31,12 @@
         android:textSize="22dp"
         android:visibility="invisible"
         />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Load Image"
+        android:id="@+id/load_poly_btn"
+        android:textSize="22dp"
+        />
 </LinearLayout>
