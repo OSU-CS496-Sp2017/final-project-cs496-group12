@@ -174,7 +174,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
             //Save file to internal filestore
             if(imgView.getDrawable() != null) {
                 beforePoly = ((BitmapDrawable) imgView.getDrawable()).getBitmap();
-                String path = saveToInternalStorage(beforePoly);
+                String path = saveToInternalStorage(beforePoly, "imgname.jpg");
                 Log.d("WRITE", "JUST WROTE TO THIS PATH =" + path);
             } else {
                 Log.d("WRITE", "no bitmap to write");
@@ -184,7 +184,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
             //Load image into imgView
             /*
             String loadPath = "/data/user/0/com.cs496.clh.lowpolyfinalproject/app_imageDir";
-            loadImageFromStorage(loadPath);
+            loadImageFromStorage(loadPath, "imgname.jpg");
             */
 
             Context context = getApplicationContext();
@@ -194,12 +194,12 @@ public class SearchResultImageActivity extends AppCompatActivity {
             toast.show();
         }
     }
-    private String saveToInternalStorage(Bitmap bitmapImage){
+    private String saveToInternalStorage(Bitmap bitmapImage, String fName){
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         // Create imageDir
-        File mypath=new File(directory,"testname.jpg");
+        File mypath=new File(directory, fName);
 
         FileOutputStream fos = null;
         try {
@@ -218,11 +218,11 @@ public class SearchResultImageActivity extends AppCompatActivity {
         return directory.getAbsolutePath();
     }
 
-    private void loadImageFromStorage(String path)
+    private void loadImageFromStorage(String path, String fName)
     {
 
         try {
-            File f=new File(path, "testname.jpg");
+            File f=new File(path, fName);
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             imgView.setImageBitmap(b);
         }
