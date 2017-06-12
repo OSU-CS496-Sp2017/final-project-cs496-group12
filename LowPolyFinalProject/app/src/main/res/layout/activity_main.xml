@@ -8,31 +8,24 @@
     tools:context="com.cs496.clh.lowpolyfinalproject.MainActivity"
     android:id="@+id/main_activity_id">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Random Low Poly Generator"
-        android:textAlignment="center"
-        android:textSize="24sp"/>
     <EditText
         android:id="@+id/text_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="#Search images..."
-        android:singleLine="true"
-        android:textSize="24sp" />
+        android:textSize="30sp" />
     <Button
         android:id="@+id/search_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Search"
-        android:textSize="22sp"/>
+        android:textSize="30sp"/>
     <Button
         android:id="@+id/search_random"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Search random"
-        android:textSize="22sp"/>
+        android:textSize="30sp"/>
     <ProgressBar
         android:id="@+id/pb_loading_indicator"
         android:layout_width="72dp"
