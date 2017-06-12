@@ -26,6 +26,8 @@ import com.uniquestudio.lowpoly.LowPoly;
 import com.cs496.clh.lowpolyfinalproject.utils.LFutils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,6 +57,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text_view);
         applyPolyBtn = (Button) findViewById(R.id.apply_poly_btn);
         starImgBtn = (Button) findViewById(R.id.star_poly_btn);
+
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("fetchedImage")) {
@@ -168,16 +171,21 @@ public class SearchResultImageActivity extends AppCompatActivity {
             //save the image logic goes here.......
             Bitmap beforePoly = null;
 
+            //Save file to internal filestore
             if(imgView.getDrawable() != null) {
                 beforePoly = ((BitmapDrawable) imgView.getDrawable()).getBitmap();
-                //String path = saveToInternalStorage(beforePoly);
-               //Log.d("WRITE", "JUST WROTE TO THIS PATH =" + path);
+                String path = saveToInternalStorage(beforePoly);
+                Log.d("WRITE", "JUST WROTE TO THIS PATH =" + path);
             } else {
                 Log.d("WRITE", "no bitmap to write");
             }
 
 
-
+            //Load image into imgView
+            /*
+            String loadPath = "/data/user/0/com.cs496.clh.lowpolyfinalproject/app_imageDir";
+            loadImageFromStorage(loadPath);
+            */
 
             Context context = getApplicationContext();
             CharSequence text = "Image is Starred!";
@@ -191,7 +199,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
         // path to /data/data/yourapp/app_data/imageDir
         File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
         // Create imageDir
-        File mypath=new File(directory,"profile.jpg");
+        File mypath=new File(directory,"testname.jpg");
 
         FileOutputStream fos = null;
         try {
@@ -208,5 +216,20 @@ public class SearchResultImageActivity extends AppCompatActivity {
             }
         }
         return directory.getAbsolutePath();
+    }
+
+    private void loadImageFromStorage(String path)
+    {
+
+        try {
+            File f=new File(path, "testname.jpg");
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            imgView.setImageBitmap(b);
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 }
