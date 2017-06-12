@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import static com.cs496.clh.lowpolyfinalproject.utils.LFutils.buildLFURL;
@@ -47,7 +48,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
     private TextView textView;
     private Button applyPolyBtn;
     private Button starImgBtn;
-    private Button loadImgBtn;
+    //private Button loadImgBtn;
     private boolean polyDone = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.text_view);
         applyPolyBtn = (Button) findViewById(R.id.apply_poly_btn);
         starImgBtn = (Button) findViewById(R.id.star_poly_btn);
-        loadImgBtn = (Button) findViewById(R.id.load_poly_btn);
+        //loadImgBtn = (Button) findViewById(R.id.load_poly_btn);
 
 
         Intent intent = getIntent();
@@ -124,7 +125,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
 
         starImgBtn.setOnClickListener(new handleStarImageClickButton());
 
-        loadImgBtn.setOnClickListener(new loadStarClickButton());
+        //loadImgBtn.setOnClickListener(new loadStarClickButton());
     }
     class handleApplyPolyClickButton implements View.OnClickListener{
         @Override
@@ -177,9 +178,13 @@ public class SearchResultImageActivity extends AppCompatActivity {
 
             //Save file to internal filestore
             if(imgView.getDrawable() != null) {
+                UUID uuid = UUID.randomUUID();
+                String randomUUIDString = uuid.toString();
+
                 beforePoly = ((BitmapDrawable) imgView.getDrawable()).getBitmap();
-                String path = saveToInternalStorage(beforePoly, "imgname.jpg");
-                Log.d("WRITE", "JUST WROTE TO THIS PATH =" + path);
+                //String path = saveToInternalStorage(beforePoly, "imgname.jpg");
+                String path = saveToInternalStorage(beforePoly, randomUUIDString );
+                Log.d("WRITE", "JUST WROTE TO THIS PATH =" + randomUUIDString );
             } else {
                 Log.d("WRITE", "no bitmap to write");
             }

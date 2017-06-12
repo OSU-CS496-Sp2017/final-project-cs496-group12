@@ -53,10 +53,14 @@ public class StarredActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        ArrayList<imgPath> resourcesId = new ArrayList<imgPath>();
+        
+
+
+
+        ArrayList<imgPath> resourcesId = new ArrayList<>();
         for(int i =0; i < 5; i++) {
             imgPath ip = new imgPath();
-            ip.b = loadImageFromStorage(fstring);
+            //ip.b = loadImageFromStorage(fstring);
             ip.path = fstring;
             resourcesId.add(ip);
         }
