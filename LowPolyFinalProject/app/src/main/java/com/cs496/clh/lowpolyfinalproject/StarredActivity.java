@@ -2,12 +2,18 @@ package com.cs496.clh.lowpolyfinalproject;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.cs496.clh.lowpolyfinalproject.data.LFSearchContract;
+import com.cs496.clh.lowpolyfinalproject.data.LFSearchDBHelper;
+import com.cs496.clh.lowpolyfinalproject.utils.LFutils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +29,7 @@ public class StarredActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String fstring = "imgname.jpg";
+    private SQLiteDatabase mDB;
     /*
     private List<Integer> reourcesId =new ArrayList<Integer>()
     {{
@@ -39,6 +46,30 @@ public class StarredActivity extends AppCompatActivity {
         public Bitmap b;
     }
     //private ArrayList<imgPath> resourcesId;
+
+    private ArrayList<LFutils.SearchResult> getAllSavedSearchResults() {
+        Cursor cursor = mDB.query(
+                LFSearchContract.FavoriteImages.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                LFSearchContract.FavoriteImages.COLUMN_TIMESTAMP + " DESC"
+        );
+
+        ArrayList<LFutils.SearchResult> searchResultsList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            LFutils.SearchResult searchResult = new LFutils.SearchResult();
+            searchResult.fullName = cursor.getString(
+                    cursor.getColumnIndex(LFSearchContract.FavoriteImages.COLUMN_FULL_NAME)
+            );
+            searchResultsList.add(searchResult);
+        }
+        cursor.close();
+        return searchResultsList;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,20 +84,37 @@ public class StarredActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        
 
+        //db
+        LFSearchDBHelper dbHelper = new LFSearchDBHelper(this);
+        mDB = dbHelper.getWritableDatabase();
+        System.out.println("-------");
+        System.out.println(mDB);
+        System.out.println("-------");
 
+        ArrayList<LFutils.SearchResult> dbList = getAllSavedSearchResults();
 
         ArrayList<imgPath> resourcesId = new ArrayList<>();
-        for(int i =0; i < 5; i++) {
+        for(int i =0; i < dbList.size(); i++) {
             imgPath ip = new imgPath();
             //ip.b = loadImageFromStorage(fstring);
-            ip.path = fstring;
+            ip.b = loadImageFromStorage(dbList.get(i).fullName);
+            //ip.path = fstring;
+            ip.path = dbList.get(i).fullName;
             resourcesId.add(ip);
         }
         // specify an adapter
-        mAdapter = new StarredImagesAdapter(resourcesId);
+        mAdapter = new StarredImagesAdapter(resourcesId, mDB);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void deleteSearchResultFromDB(String p) {
+        //if (mSearchResult != null) {
+        String sqlSelection = LFSearchContract.FavoriteImages.COLUMN_FULL_NAME + " = ?";
+        //String[] sqlSelectionArgs = { mSearchResult.fullName };
+        String[] sqlSelectionArgs = { p };
+        mDB.delete(LFSearchContract.FavoriteImages.TABLE_NAME, sqlSelection, sqlSelectionArgs);
+        //}
     }
 
     private String saveToInternalStorage(Bitmap bitmapImage, String fName){

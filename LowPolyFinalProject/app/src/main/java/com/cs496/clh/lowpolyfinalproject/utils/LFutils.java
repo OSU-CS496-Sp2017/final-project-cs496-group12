@@ -19,6 +19,11 @@ import java.util.TimeZone;
 
 public class LFutils {
 
+    public static class SearchResult implements Serializable {
+        public static final String EXTRA_SEARCH_RESULT = "LFUtils.SearchResult";
+        public String fullName;
+    }
+
     private final static String LF_BASE_URL = "http://loremflickr.com";
     private final static String LF_S = "/";
 

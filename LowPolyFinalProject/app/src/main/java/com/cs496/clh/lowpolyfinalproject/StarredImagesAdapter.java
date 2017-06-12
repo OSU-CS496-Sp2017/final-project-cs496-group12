@@ -2,6 +2,7 @@ package com.cs496.clh.lowpolyfinalproject;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 
+import com.cs496.clh.lowpolyfinalproject.data.LFSearchContract;
+import com.cs496.clh.lowpolyfinalproject.data.LFSearchDBHelper;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +33,21 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
     private ArrayList<StarredActivity.imgPath> resourcesId;
     private static Toast toast;
     //private OnSearchResultClickListener mSearchResultClickListener;
-    public StarredImagesAdapter(ArrayList<StarredActivity.imgPath> r)
+    private SQLiteDatabase mDB;
+    private void deleteSearchResultFromDB(String p) {
+        //if (mSearchResult != null) {
+            String sqlSelection = LFSearchContract.FavoriteImages.COLUMN_FULL_NAME + " = ?";
+            //String[] sqlSelectionArgs = { mSearchResult.fullName };
+            String[] sqlSelectionArgs = { p };
+            mDB.delete(LFSearchContract.FavoriteImages.TABLE_NAME, sqlSelection, sqlSelectionArgs);
+        //}
+    }
+
+    public StarredImagesAdapter(ArrayList<StarredActivity.imgPath> r, SQLiteDatabase db)
     {
         //mSearchResultClickListener = clickListener;
         resourcesId = r;
+        mDB = db;
     }
     @Override
     public SearchResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -147,7 +162,11 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
         public void onClick(View v) {
             position = getAdapterPosition();
             StarredActivity.imgPath searchResult = resourcesId.get(position);
+
+
             Log.d("PATH", "The path is " + searchResult.path);
+            Log.d("PATH", "DELETING FROM DB");
+            deleteSearchResultFromDB(searchResult.path);
             resourcesId.remove(position);
             //remove from the view
             notifyItemRemoved(position);
@@ -156,3 +175,5 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
         }
     }
 }
+
+

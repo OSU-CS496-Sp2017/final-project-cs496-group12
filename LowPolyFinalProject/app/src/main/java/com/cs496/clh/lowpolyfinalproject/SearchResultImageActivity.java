@@ -1,8 +1,11 @@
 package com.cs496.clh.lowpolyfinalproject;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -21,6 +24,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.cs496.clh.lowpolyfinalproject.data.LFSearchContract;
+import com.cs496.clh.lowpolyfinalproject.data.LFSearchDBHelper;
 import com.uniquestudio.lowpoly.LowPoly;
 
 import com.cs496.clh.lowpolyfinalproject.utils.LFutils;
@@ -50,6 +55,12 @@ public class SearchResultImageActivity extends AppCompatActivity {
     private Button starImgBtn;
     //private Button loadImgBtn;
     private boolean polyDone = false;
+
+    private String path;
+    private LFutils.SearchResult mSearchResult;
+    private SQLiteDatabase mDB;
+    private boolean mIsStarred = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +72,13 @@ public class SearchResultImageActivity extends AppCompatActivity {
         starImgBtn = (Button) findViewById(R.id.star_poly_btn);
         //loadImgBtn = (Button) findViewById(R.id.load_poly_btn);
 
+
+        //db
+        LFSearchDBHelper dbHelper = new LFSearchDBHelper(this);
+        mDB = dbHelper.getWritableDatabase();
+        System.out.println("-------");
+        System.out.println(mDB);
+        System.out.println("-------");
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("fetchedImage")) {
@@ -120,12 +138,68 @@ public class SearchResultImageActivity extends AppCompatActivity {
             String searchedQuery =(String) intent.getSerializableExtra("searchQuery");
             textView.setText("You Searched ".concat(searchedQuery).concat("!"));
         }
-
+        //mIsStarred = checkIsImageSaved();
         applyPolyBtn.setOnClickListener(new handleApplyPolyClickButton());
 
         starImgBtn.setOnClickListener(new handleStarImageClickButton());
 
         //loadImgBtn.setOnClickListener(new loadStarClickButton());
+    }
+
+    @Override
+    protected void onDestroy() {
+        mDB.close();
+        super.onDestroy();
+    }
+
+    private boolean checkIsImageSaved() {
+        boolean isSaved = false;
+        if (mSearchResult != null) {
+            String sqlSelection =
+                    LFSearchContract.FavoriteImages.COLUMN_FULL_NAME + " = ?";
+            String[] sqlSelectionArgs = { mSearchResult.fullName };
+            Cursor cursor = mDB.query(
+                    LFSearchContract.FavoriteImages.TABLE_NAME,
+                    null,
+                    sqlSelection,
+                    sqlSelectionArgs,
+                    null,
+                    null,
+                    null
+            );
+            isSaved = cursor.getCount() > 0;
+            cursor.close();
+        }
+        return isSaved;
+    }
+
+    private void updateSearchResultInDB(String p) {
+        if (mIsStarred) {
+            addSearchResultToDB(p);
+        } else {
+            deleteSearchResultFromDB(p);
+        }
+    }
+
+    private long addSearchResultToDB(String p) {
+        System.out.println(p);
+        if (p != null) {
+            System.out.println("ABOUT TO ADD");
+            ContentValues values = new ContentValues();
+            values.put(LFSearchContract.FavoriteImages.COLUMN_FULL_NAME, p);
+            System.out.println(LFSearchContract.FavoriteImages.TABLE_NAME);
+            return mDB.insert(LFSearchContract.FavoriteImages.TABLE_NAME, null, values);
+        } else {
+            return -1;
+        }
+    }
+    private void deleteSearchResultFromDB(String p) {
+        //if (mSearchResult != null) {
+        String sqlSelection = LFSearchContract.FavoriteImages.COLUMN_FULL_NAME + " = ?";
+        //String[] sqlSelectionArgs = { mSearchResult.fullName };
+        String[] sqlSelectionArgs = { p };
+        mDB.delete(LFSearchContract.FavoriteImages.TABLE_NAME, sqlSelection, sqlSelectionArgs);
+        //}
     }
     class handleApplyPolyClickButton implements View.OnClickListener{
         @Override
@@ -184,6 +258,8 @@ public class SearchResultImageActivity extends AppCompatActivity {
                 beforePoly = ((BitmapDrawable) imgView.getDrawable()).getBitmap();
                 //String path = saveToInternalStorage(beforePoly, "imgname.jpg");
                 String path = saveToInternalStorage(beforePoly, randomUUIDString );
+                //mIsStarred = true;
+                addSearchResultToDB(randomUUIDString);
                 Log.d("WRITE", "JUST WROTE TO THIS PATH =" + randomUUIDString );
             } else {
                 Log.d("WRITE", "no bitmap to write");
