@@ -233,7 +233,7 @@ public class SearchResultImageActivity extends AppCompatActivity {
                 //rough way of handling load failure
                 //polyDone = true;
                 //applyPolyBtn.setVisibility(View.GONE);
-                Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.searchfailure, options);
+                Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.sf, options);
                 imgView.setImageBitmap(placeHolder);
                 Context context = getApplicationContext();
                 applyPolyBtn.setVisibility(View.GONE);
@@ -320,6 +320,15 @@ public class SearchResultImageActivity extends AppCompatActivity {
             }
         }
         return directory.getAbsolutePath();
+    }
+
+    private void deleteInternalStorage(String fName){
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        String deleteString = directory.getAbsolutePath() + fName;
+        deleteFile(deleteString);
+        Log.d("DELETE", "Deleted " + directory.getAbsolutePath() + fName);
     }
 
     private Bitmap loadImageFromStorage(String fName)

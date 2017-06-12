@@ -2,6 +2,7 @@ package com.cs496.clh.lowpolyfinalproject;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -21,6 +22,7 @@ import android.view.View.OnClickListener;
 import com.cs496.clh.lowpolyfinalproject.data.LFSearchContract;
 import com.cs496.clh.lowpolyfinalproject.data.LFSearchDBHelper;
 
+import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,18 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
     private static Toast toast;
     //private OnSearchResultClickListener mSearchResultClickListener;
     private SQLiteDatabase mDB;
+    private Context mCon;
+
+    private void deleteInternalStorage(String fName){
+        ContextWrapper cw = new ContextWrapper(mCon);
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        String deleteString = directory.getAbsolutePath() + fName;
+        File dFile = new File(directory, fName);
+        dFile.delete();
+        Log.d("DELETE", "Deleted " + directory.getAbsolutePath() + "/" + fName);
+    }
+
     private void deleteSearchResultFromDB(String p) {
         //if (mSearchResult != null) {
             String sqlSelection = LFSearchContract.FavoriteImages.COLUMN_FULL_NAME + " = ?";
@@ -43,11 +57,12 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
         //}
     }
 
-    public StarredImagesAdapter(ArrayList<StarredActivity.imgPath> r, SQLiteDatabase db)
+    public StarredImagesAdapter(ArrayList<StarredActivity.imgPath> r, SQLiteDatabase db, Context c)
     {
         //mSearchResultClickListener = clickListener;
         resourcesId = r;
         mDB = db;
+        mCon = c;
     }
     @Override
     public SearchResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -167,6 +182,8 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
             Log.d("PATH", "The path is " + searchResult.path);
             Log.d("PATH", "DELETING FROM DB");
             deleteSearchResultFromDB(searchResult.path);
+            Log.d("PATH", "DELETING FROM LOCAL STORAGE");
+            deleteInternalStorage(searchResult.path);
             resourcesId.remove(position);
             //remove from the view
             notifyItemRemoved(position);

@@ -104,7 +104,7 @@ public class StarredActivity extends AppCompatActivity {
             resourcesId.add(ip);
         }
         // specify an adapter
-        mAdapter = new StarredImagesAdapter(resourcesId, mDB);
+        mAdapter = new StarredImagesAdapter(resourcesId, mDB, getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
     }
 
