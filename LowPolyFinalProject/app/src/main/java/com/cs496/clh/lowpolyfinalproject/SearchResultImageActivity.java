@@ -236,6 +236,9 @@ public class SearchResultImageActivity extends AppCompatActivity {
                 Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.searchfailure, options);
                 imgView.setImageBitmap(placeHolder);
                 Context context = getApplicationContext();
+                applyPolyBtn.setVisibility(View.GONE);
+                starImgBtn.setVisibility(View.GONE);
+                textView.setText("SEARCH FAILURE, TRY AGAIN! :(");
                 CharSequence text = "Image search failure! Try again!";
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, text, duration);
