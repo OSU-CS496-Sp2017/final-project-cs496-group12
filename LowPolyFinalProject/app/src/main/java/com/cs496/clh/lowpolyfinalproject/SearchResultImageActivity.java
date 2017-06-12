@@ -203,9 +203,9 @@ public class SearchResultImageActivity extends AppCompatActivity {
         public void onClick(View view) {
             //Load image into imgView
 
-            String loadPath = "/data/user/0/com.cs496.clh.lowpolyfinalproject/app_imageDir";
-            loadImageFromStorage(loadPath, "imgname.jpg");
-
+            //String loadPath = "/data/user/0/com.cs496.clh.lowpolyfinalproject/app_imageDir";
+            Bitmap b = loadImageFromStorage("imgname.jpg");
+            imgView.setImageBitmap(b);
 
             Context context = getApplicationContext();
             CharSequence text = "Starred image loaded!";
@@ -238,18 +238,22 @@ public class SearchResultImageActivity extends AppCompatActivity {
         return directory.getAbsolutePath();
     }
 
-    private void loadImageFromStorage(String path, String fName)
+    private Bitmap loadImageFromStorage(String fName)
     {
-
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        Bitmap b = null;
         try {
-            File f=new File(path, fName);
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-            imgView.setImageBitmap(b);
+            File f=new File(directory, fName);
+             b = BitmapFactory.decodeStream(new FileInputStream(f));
+
+            //imgView.setImageBitmap(b);
         }
         catch (FileNotFoundException e)
         {
             e.printStackTrace();
         }
+        return b;
 
     }
 }

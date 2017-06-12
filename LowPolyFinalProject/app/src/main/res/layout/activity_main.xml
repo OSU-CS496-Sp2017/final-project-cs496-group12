@@ -33,6 +33,13 @@
         android:layout_height="wrap_content"
         android:text="Search random"
         android:textSize="22sp"/>
+    <ProgressBar
+        android:id="@+id/pb_loading_indicator"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_margin="32dp"
+        android:layout_gravity="top|center_horizontal"
+        android:visibility="invisible"/>
     <!--<Button-->
         <!--android:id="@+id/btn_search"-->
         <!--android:layout_width="match_parent"-->

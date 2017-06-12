@@ -12,18 +12,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 public class MainActivity extends AppCompatActivity {
+        //implements StarredImagesAdapter.OnSearchResultClickListener {
 
     private EditText editTextBox;
     private static final String SEARCH_BOX_KEY = "SearchEditTextBox";
+    //private ProgressBar mLoadingIndicatorPB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         editTextBox = (EditText)findViewById(R.id.text_box);
-
+        //mLoadingIndicatorPB = (ProgressBar)findViewById(R.id.pb_loading_indicator);
         Button searchButton = (Button)findViewById(R.id.search_btn);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 String searchQuery = editTextBox.getText().toString();
                 if (!TextUtils.isEmpty(searchQuery)) {
                     Log.d("SEARCH", "Input search query = " + searchQuery);
+                    //mLoadingIndicatorPB.setVisibility(View.VISIBLE);
                     //call search method here
                     //here i will show the other view
                     fetchImage(searchQuery);

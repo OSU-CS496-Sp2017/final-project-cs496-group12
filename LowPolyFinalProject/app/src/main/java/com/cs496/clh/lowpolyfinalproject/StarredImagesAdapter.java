@@ -2,6 +2,7 @@ package com.cs496.clh.lowpolyfinalproject;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.TypedArrayUtils;
@@ -12,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,32 +25,38 @@ import java.util.List;
  * Created by Luay on 6/10/2017.
  */
 
-public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdapter.ViewHolder> {
-    private List<Integer> reourcesId;
+public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdapter.SearchResultViewHolder> {
+    private ArrayList<StarredActivity.imgPath> resourcesId;
     private static Toast toast;
-    public StarredImagesAdapter(List<Integer> r)
+    //private OnSearchResultClickListener mSearchResultClickListener;
+    public StarredImagesAdapter(ArrayList<StarredActivity.imgPath> r)
     {
-        reourcesId = r;
+        //mSearchResultClickListener = clickListener;
+        resourcesId = r;
     }
     @Override
-    public StarredImagesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SearchResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.viewholder, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        //ViewHolder viewHolder = new ViewHolder(view);
+        return new SearchResultViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(StarredImagesAdapter.ViewHolder holder, int position) {
-        holder.bind(reourcesId.get(position));
-        holder.unstarImg.setOnClickListener(new handleUnstarImgClick(position));
-
+    public void onBindViewHolder(SearchResultViewHolder holder, int position) {
+        holder.bind(resourcesId.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return reourcesId.size();
+        if (resourcesId != null) {
+            return resourcesId.size();
+        } else {
+            return 0;
+        }
     }
+
+    /*
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private ImageView imgView;
         public Button unstarImg;
@@ -69,6 +78,11 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
 
 
     }
+
+    public interface OnSearchResultClickListener {
+        void onSearchResultClick(StarredActivity.imgPath searchResult);
+    }
+
     class handleUnstarImgClick implements View.OnClickListener {
 
         private Integer position;
@@ -84,13 +98,13 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
             Context context = view.getContext();
 
             //remove from database
-            Log.d("size",Integer.toString(reourcesId.size()));
-            reourcesId.remove(itemPosition);
+            Log.d("size",Integer.toString(resourcesId.size()));
+            resourcesId.remove(itemPosition);
             //reourcesId.
-            Log.d("size",Integer.toString(reourcesId.size()));
+            Log.d("size",Integer.toString(resourcesId.size()));
             //remove from the view
             notifyItemRemoved(itemPosition);
-            notifyItemRangeChanged(itemPosition, reourcesId.size());
+            notifyItemRangeChanged(itemPosition, resourcesId.size());
 
 
             CharSequence text = "Image is removed!";
@@ -101,6 +115,44 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
                 toast = Toast.makeText(context, text, duration);
             }
             toast.show();
+        }
+    }
+    */
+    class SearchResultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private int position;
+        /*
+        SearchResultViewHolder(Integer i){
+            position = i;
+        }*/
+
+        //private TextView mSearchResultTV;
+        private ImageView mImg;
+        public Button unstarImg;
+
+        public SearchResultViewHolder(View itemView) {
+            super(itemView);
+            unstarImg = (Button) itemView.findViewById(R.id.unstarred_btn);
+            //mSearchResultTV = (TextView)itemView.findViewById(R.id.tv_search_result);
+            mImg = (ImageView)itemView.findViewById(R.id.image_view);
+            //itemView.setOnClickListener(this);
+            unstarImg.setOnClickListener(this);
+        }
+
+        public void bind(StarredActivity.imgPath searchResult) {
+            //mSearchResultTV.setText(searchResult.fullName);
+            mImg.setImageBitmap(searchResult.b);
+        }
+
+        @Override
+        public void onClick(View v) {
+            position = getAdapterPosition();
+            StarredActivity.imgPath searchResult = resourcesId.get(position);
+            Log.d("PATH", "The path is " + searchResult.path);
+            resourcesId.remove(position);
+            //remove from the view
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, resourcesId.size());
+            //mSearchResultClickListener.onSearchResultClick(searchResult);
         }
     }
 }
