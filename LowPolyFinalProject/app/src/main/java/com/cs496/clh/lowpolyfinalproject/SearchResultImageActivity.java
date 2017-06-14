@@ -86,24 +86,13 @@ public class SearchResultImageActivity extends AppCompatActivity {
             String ex =(String) intent.getSerializableExtra("fetchedImage");
             String query = intent.getStringExtra("searchQuery");
             Log.d("DEBUG","Inside bitmap fetch location");
-            Log.d("DEBUG","search query IS = " + query);
-            //example placeholder image
-            Drawable placeHolderImg = getResources().getDrawable( R.drawable.ic_photo_camera_black_24dp );
-            //ColorFilter filter = new LightingColorFilter( Color.BLUE, Color.BLUE );
-            //imgView.setColorFilter(filter);
-            //imgView.setImageDrawable(placeHolderImg);
+            Log.d("DEBUG","search query IS = " + query);;
 
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 4;
             Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
             imgView.setImageBitmap(placeHolder);
 
-            //BitmapFactory.Options options = new BitmapFactory.Options();
-            //options.inSampleSize = 4;
-            //Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.s1000, options);
-            //imgView.setImageBitmap(placeHolder);
-
-            //String bURL = "http://loremflickr.com/1000/1000/boat";
             //default width and height
             int dW = 300;
             int dH = 300;
@@ -116,7 +105,6 @@ public class SearchResultImageActivity extends AppCompatActivity {
             Glide.
                     with(SearchResultImageActivity.this).
                     load(bURL).into(imgView);
-            //sleep testing
 
             long sleeptime = 3000;
             try {
@@ -138,12 +126,10 @@ public class SearchResultImageActivity extends AppCompatActivity {
             String searchedQuery =(String) intent.getSerializableExtra("searchQuery");
             textView.setText("You Searched ".concat(searchedQuery).concat("!"));
         }
-        //mIsStarred = checkIsImageSaved();
         applyPolyBtn.setOnClickListener(new handleApplyPolyClickButton());
 
         starImgBtn.setOnClickListener(new handleStarImageClickButton());
 
-        //loadImgBtn.setOnClickListener(new loadStarClickButton());
     }
 
     @Override
@@ -194,12 +180,9 @@ public class SearchResultImageActivity extends AppCompatActivity {
         }
     }
     private void deleteSearchResultFromDB(String p) {
-        //if (mSearchResult != null) {
         String sqlSelection = LFSearchContract.FavoriteImages.COLUMN_FULL_NAME + " = ?";
-        //String[] sqlSelectionArgs = { mSearchResult.fullName };
         String[] sqlSelectionArgs = { p };
         mDB.delete(LFSearchContract.FavoriteImages.TABLE_NAME, sqlSelection, sqlSelectionArgs);
-        //}
     }
     class handleApplyPolyClickButton implements View.OnClickListener{
         @Override
@@ -222,17 +205,13 @@ public class SearchResultImageActivity extends AppCompatActivity {
                     applyPolyBtn.setVisibility(View.GONE);
                     starImgBtn.setVisibility(View.VISIBLE);
                 } else {
-                    // doesn't seem to be detecting failure
                     Log.d("FAILURE", "No image in before poly");
                 }
             } else {
-                //doesn't seem to be detecting failure
                 Log.d("FAILURE", "No image inside view");
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 4;
-                //rough way of handling load failure
-                //polyDone = true;
-                //applyPolyBtn.setVisibility(View.GONE);
+
                 Bitmap placeHolder = BitmapFactory.decodeResource(getResources(), R.drawable.sf, options);
                 imgView.setImageBitmap(placeHolder);
                 Context context = getApplicationContext();
@@ -267,13 +246,6 @@ public class SearchResultImageActivity extends AppCompatActivity {
             } else {
                 Log.d("WRITE", "no bitmap to write");
             }
-
-
-            //Load image into imgView
-            /*
-            String loadPath = "/data/user/0/com.cs496.clh.lowpolyfinalproject/app_imageDir";
-            loadImageFromStorage(loadPath, "imgname.jpg");
-            */
 
             Context context = getApplicationContext();
             CharSequence text = "Image is Starred!";

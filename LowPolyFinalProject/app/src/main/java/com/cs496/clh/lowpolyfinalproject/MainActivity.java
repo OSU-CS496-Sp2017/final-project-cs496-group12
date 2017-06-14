@@ -18,18 +18,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-        //implements StarredImagesAdapter.OnSearchResultClickListener {
 
     private EditText editTextBox;
     private static final String SEARCH_BOX_KEY = "SearchEditTextBox";
-    //private ProgressBar mLoadingIndicatorPB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         editTextBox = (EditText)findViewById(R.id.text_box);
-        //mLoadingIndicatorPB = (ProgressBar)findViewById(R.id.pb_loading_indicator);
         Button searchButton = (Button)findViewById(R.id.search_btn);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(this, SearchResultImageActivity.class);
         intent.putExtra("fetchedImage", "image object should go here");
-        String searchQuery = (String) editTextBox.getText().toString();
+        String searchQuery = editTextBox.getText().toString();
         intent.putExtra("searchQuery", searchQuery);
         startActivity(intent);
     }
@@ -97,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);;
         Log.d("onSaveInstanceState","outState");
-        String searchQuery = (String) editTextBox.getText().toString();
+        String searchQuery = editTextBox.getText().toString();
         outState.putString(SEARCH_BOX_KEY,searchQuery);
     }
     private void doSearch()

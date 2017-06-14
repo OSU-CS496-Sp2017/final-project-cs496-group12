@@ -36,8 +36,6 @@ import java.util.List;
 
 public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdapter.SearchResultViewHolder> {
     private ArrayList<StarredActivity.imgPath> resourcesId;
-    private static Toast toast;
-    //private OnSearchResultClickListener mSearchResultClickListener;
     private SQLiteDatabase mDB;
     private Context mCon;
 
@@ -52,17 +50,13 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
     }
 
     private void deleteSearchResultFromDB(String p) {
-        //if (mSearchResult != null) {
-            String sqlSelection = LFSearchContract.FavoriteImages.COLUMN_FULL_NAME + " = ?";
-            //String[] sqlSelectionArgs = { mSearchResult.fullName };
-            String[] sqlSelectionArgs = { p };
-            mDB.delete(LFSearchContract.FavoriteImages.TABLE_NAME, sqlSelection, sqlSelectionArgs);
-        //}
+        String sqlSelection = LFSearchContract.FavoriteImages.COLUMN_FULL_NAME + " = ?";
+        String[] sqlSelectionArgs = { p };
+        mDB.delete(LFSearchContract.FavoriteImages.TABLE_NAME, sqlSelection, sqlSelectionArgs);
     }
 
     public StarredImagesAdapter(ArrayList<StarredActivity.imgPath> r, SQLiteDatabase db, Context c)
     {
-        //mSearchResultClickListener = clickListener;
         resourcesId = r;
         mDB = db;
         mCon = c;
@@ -72,7 +66,6 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
     public SearchResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.viewholder, parent, false);
-        //ViewHolder viewHolder = new ViewHolder(view);
         return new SearchResultViewHolder(view);
     }
 
@@ -90,90 +83,21 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
         }
     }
 
-    /*
-    public static class ViewHolder extends RecyclerView.ViewHolder{
-        private ImageView imgView;
-        public Button unstarImg;
-        private static Context context;
-        public ViewHolder(View itemView) {
-            super(itemView);
-            //itemView.setOnClickListener(this);
-            context = itemView.getContext();
-            imgView = (ImageView) itemView.findViewById(R.id.image_view);
-            unstarImg = (Button) itemView.findViewById(R.id.unstarred_btn);
-            //unstarImg.setOnClickListener(new handleUnstarImgClick());
-        }
-        public void bind(Integer i)
-        {
-            Drawable drawable =  ContextCompat.getDrawable(context, i);
-            if(drawable !=null)
-                imgView.setImageDrawable(drawable);
-        }
 
-
-    }
-
-    public interface OnSearchResultClickListener {
-        void onSearchResultClick(StarredActivity.imgPath searchResult);
-    }
-
-    class handleUnstarImgClick implements View.OnClickListener {
-
-        private Integer position;
-
-        handleUnstarImgClick(Integer i){
-            position = i;
-        }
-
-        @Override
-        public void onClick(View view) {
-            int itemPosition = position;
-            Log.d("handleUnstarImgClick", "onClick " + itemPosition + " ");
-            Context context = view.getContext();
-
-            //remove from database
-            Log.d("size",Integer.toString(resourcesId.size()));
-            resourcesId.remove(itemPosition);
-            //reourcesId.
-            Log.d("size",Integer.toString(resourcesId.size()));
-            //remove from the view
-            notifyItemRemoved(itemPosition);
-            notifyItemRangeChanged(itemPosition, resourcesId.size());
-
-
-            CharSequence text = "Image is removed!";
-            int duration = Toast.LENGTH_SHORT;
-            try{ toast.getView().isShown();
-                toast.setText(text);
-            } catch (Exception e) {
-                toast = Toast.makeText(context, text, duration);
-            }
-            toast.show();
-        }
-    }
-    */
     class SearchResultViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private int position;
-        /*
-        SearchResultViewHolder(Integer i){
-            position = i;
-        }*/
 
-        //private TextView mSearchResultTV;
         private ImageView mImg;
         public Button unstarImg;
 
         public SearchResultViewHolder(View itemView) {
             super(itemView);
             unstarImg = (Button) itemView.findViewById(R.id.unstarred_btn);
-            //mSearchResultTV = (TextView)itemView.findViewById(R.id.tv_search_result);
             mImg = (ImageView)itemView.findViewById(R.id.image_view);
-            //itemView.setOnClickListener(this);
             unstarImg.setOnClickListener(this);
         }
 
         public void bind(StarredActivity.imgPath searchResult) {
-            //mSearchResultTV.setText(searchResult.fullName);
             mImg.setImageBitmap(searchResult.b);
         }
         @Override

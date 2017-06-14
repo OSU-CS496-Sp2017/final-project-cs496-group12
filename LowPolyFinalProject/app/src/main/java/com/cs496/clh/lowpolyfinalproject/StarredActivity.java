@@ -34,16 +34,7 @@ public class StarredActivity extends AppCompatActivity {
     private String fstring = "imgname.jpg";
     private SQLiteDatabase mDB;
     private Activity activity;
-    /*
-    private List<Integer> reourcesId =new ArrayList<Integer>()
-    {{
-            add(R.drawable.ic_assistant_black_24dp);
-            add(R.drawable.ic_photo_camera_black_24dp);
-            add(R.drawable.s200);
-            add(R.drawable.s400);
-            add(R.drawable.s1000);
-        }};
-       */
+
     public static class imgPath implements Serializable {
         public static final String EXTRA_SEARCH_RESULT = "LFUtils.SearchResult";
         public String path;
