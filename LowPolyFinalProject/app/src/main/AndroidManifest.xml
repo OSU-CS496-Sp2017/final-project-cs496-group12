@@ -22,6 +22,7 @@
         </activity>
         <activity
             android:name=".SearchResultImageActivity"
+            android:label="Search Result"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -29,10 +30,12 @@
         </activity>
         <activity
             android:name=".StarredActivity"
+            android:label="Starred Images"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
+            l
         </activity>
     </application>
 
