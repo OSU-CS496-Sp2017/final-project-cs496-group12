@@ -22,13 +22,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Search"
-        android:textSize="30sp"/>
+        android:textSize="30sp"
+        android:drawableLeft="@drawable/ic_search_black_24dp"/>
     <Button
         android:id="@+id/search_random"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Search random"
-        android:textSize="30sp"/>
+        android:textSize="30sp"
+        android:drawableLeft="@drawable/ic_pageview_black_24dp"/>
     <ProgressBar
         android:id="@+id/pb_loading_indicator"
         android:layout_width="72dp"
