@@ -1,5 +1,6 @@
 package com.cs496.clh.lowpolyfinalproject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.database.Cursor;
@@ -10,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.cs496.clh.lowpolyfinalproject.data.LFSearchContract;
 import com.cs496.clh.lowpolyfinalproject.data.LFSearchDBHelper;
@@ -30,6 +33,7 @@ public class StarredActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private String fstring = "imgname.jpg";
     private SQLiteDatabase mDB;
+    private Activity activity;
     /*
     private List<Integer> reourcesId =new ArrayList<Integer>()
     {{
@@ -104,8 +108,12 @@ public class StarredActivity extends AppCompatActivity {
             resourcesId.add(ip);
         }
         // specify an adapter
-        mAdapter = new StarredImagesAdapter(resourcesId, mDB, getApplicationContext());
+        mAdapter = new StarredImagesAdapter(resourcesId, mDB, this);
         mRecyclerView.setAdapter(mAdapter);
+        if(resourcesId.size()==0){
+            TextView textView = (TextView) findViewById(R.id.no_imgs_txtview);
+            textView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void deleteSearchResultFromDB(String p) {
