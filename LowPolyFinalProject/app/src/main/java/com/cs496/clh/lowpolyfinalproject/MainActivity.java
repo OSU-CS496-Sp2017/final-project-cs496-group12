@@ -6,13 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
         //implements StarredImagesAdapter.OnSearchResultClickListener {
@@ -31,14 +34,17 @@ public class MainActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String searchQuery = editTextBox.getText().toString();
-                if (!TextUtils.isEmpty(searchQuery)) {
-                    Log.d("SEARCH", "Input search query = " + searchQuery);
-                    //mLoadingIndicatorPB.setVisibility(View.VISIBLE);
-                    //call search method here
-                    //here i will show the other view
-                    fetchImage(searchQuery);
+                doSearch();
+            }
+        });
+        editTextBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    doSearch();
+                    return true;
                 }
+                return false;
             }
         });
 
@@ -53,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         randomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                    editTextBox.setText("");
                     fetchImage("");
             }
         });
@@ -92,5 +99,16 @@ public class MainActivity extends AppCompatActivity {
         Log.d("onSaveInstanceState","outState");
         String searchQuery = (String) editTextBox.getText().toString();
         outState.putString(SEARCH_BOX_KEY,searchQuery);
+    }
+    private void doSearch()
+    {
+        String searchQuery = editTextBox.getText().toString();
+        if (!TextUtils.isEmpty(searchQuery)) {
+            Log.d("SEARCH", "Input search query = " + searchQuery);
+            //mLoadingIndicatorPB.setVisibility(View.VISIBLE);
+            //call search method here
+            //here i will show the other view
+            fetchImage(searchQuery);
+        }
     }
 }

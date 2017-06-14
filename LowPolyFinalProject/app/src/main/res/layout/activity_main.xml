@@ -13,7 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="#Search images..."
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:maxLines="1"/>
     <Button
         android:id="@+id/search_btn"
         android:layout_width="match_parent"
