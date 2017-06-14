@@ -1,13 +1,16 @@
 package com.cs496.clh.lowpolyfinalproject;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.TypedArrayUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -63,6 +66,7 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
         resourcesId = r;
         mDB = db;
         mCon = c;
+
     }
     @Override
     public SearchResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -172,23 +176,35 @@ public class StarredImagesAdapter extends RecyclerView.Adapter<StarredImagesAdap
             //mSearchResultTV.setText(searchResult.fullName);
             mImg.setImageBitmap(searchResult.b);
         }
-
         @Override
         public void onClick(View v) {
-            position = getAdapterPosition();
-            StarredActivity.imgPath searchResult = resourcesId.get(position);
+            openConfirmDialoug(v);
+        }
+        public void openConfirmDialoug(final View view){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder((Activity) mCon);
+            alertDialogBuilder.setMessage("Are you sure you want to unstar this image?");
+            alertDialogBuilder.setPositiveButton("yes",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            position = getAdapterPosition();
+                            StarredActivity.imgPath searchResult = resourcesId.get(position);
+                            Log.d("PATH", "The path is " + searchResult.path);
+                            Log.d("PATH", "DELETING FROM DB");
+                            deleteSearchResultFromDB(searchResult.path);
+                            Log.d("PATH", "DELETING FROM LOCAL STORAGE");
+                            deleteInternalStorage(searchResult.path);
+                            resourcesId.remove(position);
+                            //remove from the view
+                            notifyItemRemoved(position);
+                            notifyItemRangeChanged(position, resourcesId.size());
+                        }
+                    });
 
+            alertDialogBuilder.setNegativeButton("No",null);
 
-            Log.d("PATH", "The path is " + searchResult.path);
-            Log.d("PATH", "DELETING FROM DB");
-            deleteSearchResultFromDB(searchResult.path);
-            Log.d("PATH", "DELETING FROM LOCAL STORAGE");
-            deleteInternalStorage(searchResult.path);
-            resourcesId.remove(position);
-            //remove from the view
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, resourcesId.size());
-            //mSearchResultClickListener.onSearchResultClick(searchResult);
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
     }
 }
