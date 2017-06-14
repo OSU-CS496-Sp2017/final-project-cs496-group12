@@ -102,9 +102,6 @@ public class MainActivity extends AppCompatActivity {
         String searchQuery = editTextBox.getText().toString();
         if (!TextUtils.isEmpty(searchQuery)) {
             Log.d("SEARCH", "Input search query = " + searchQuery);
-            //mLoadingIndicatorPB.setVisibility(View.VISIBLE);
-            //call search method here
-            //here i will show the other view
             fetchImage(searchQuery);
         }
     }
