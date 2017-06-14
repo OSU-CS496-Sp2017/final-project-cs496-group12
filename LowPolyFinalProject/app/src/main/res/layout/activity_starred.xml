@@ -6,7 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.cs496.clh.lowpolyfinalproject.StarredActivity">
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="You have no starred images"
+        android:textAlignment="center"
+        android:textSize="24dp"
+        android:id="@+id/no_imgs_txtview"
+        android:textColor="@color/colorPrimaryDark"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/starred_recycler_view"
         android:layout_width="match_parent"
